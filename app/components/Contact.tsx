@@ -1,16 +1,31 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { profile } from "../data/content";
 import { label } from "./Glass";
 import { Magnetic } from "./Motion";
 
-const links = [
-  { name: "LinkedIn", href: "", accent: "hover:border-cyan-400/50 hover:text-cyan-200" },
-  { name: "GitHub", href: "", accent: "hover:border-violet-400/50 hover:text-violet-200" },
-];
-
 export default function Contact() {
+  const [copied, setCopied] = useState(false);
+
+  const copyEmail = async () => {
+    try {
+      await navigator.clipboard.writeText(profile.email);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      const el = document.createElement("textarea");
+      el.value = profile.email;
+      document.body.appendChild(el);
+      el.select();
+      document.execCommand("copy");
+      document.body.removeChild(el);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
+
   return (
     <section id="contact" className="relative scroll-mt-24 overflow-hidden px-5 py-28 text-center sm:px-6 sm:py-40">
       <motion.div aria-hidden animate={{ scale: [1, 1.3, 1], opacity: [0.15, 0.32, 0.15] }} transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }} className="pointer-events-none absolute left-1/2 top-1/2 -z-10 h-[26rem] w-[26rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-violet-500/25 blur-[130px] sm:h-[34rem] sm:w-[34rem]" />
@@ -21,10 +36,24 @@ export default function Contact() {
         <motion.h2 animate={{ backgroundPosition: ["0% 50%", "200% 50%"] }} transition={{ duration: 8, repeat: Infinity, ease: "linear" }} className="mt-5 bg-gradient-to-r from-violet-200 via-white via-30% to-cyan-200 bg-[length:200%_auto] bg-clip-text text-3xl font-light tracking-[-0.03em] text-transparent sm:text-5xl lg:text-6xl">Let&apos;s build something.</motion.h2>
         <p className="mx-auto mt-6 max-w-lg text-sm font-light text-zinc-400 sm:text-base">I&apos;m open to frontend and data roles in Germany. Reach out — I read everything.</p>
 
-        <div className="mt-10 flex flex-wrap items-center justify-center gap-3 sm:mt-12">
+        <motion.button onClick={copyEmail} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} className="group relative mt-10 inline-flex items-center gap-3 overflow-hidden rounded-2xl border border-white/[0.12] bg-white/[0.05] px-5 py-4 backdrop-blur-xl transition-colors hover:border-violet-400/50 sm:px-7">
+          <span className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/[0.09] to-transparent transition-transform duration-1000 group-hover:translate-x-full" />
+          <span className="relative select-all text-[13px] font-light text-zinc-100 sm:text-base">{profile.email}</span>
+          <span className="relative flex h-6 w-16 items-center justify-center">
+            <AnimatePresence mode="wait">
+              {copied ? (
+                <motion.span key="done" initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }} className="text-[11px] font-medium text-emerald-300">Copied!</motion.span>
+              ) : (
+                <motion.span key="copy" initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }} className="text-[11px] font-medium text-zinc-500 group-hover:text-violet-300">Copy</motion.span>
+              )}
+            </AnimatePresence>
+          </span>
+        </motion.button>
+
+        <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
           <Magnetic>
-            <motion.a href={`mailto:${profile.email}`} whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }} className="group relative block overflow-hidden rounded-full bg-gradient-to-r from-violet-400 via-fuchsia-400 to-cyan-400 p-px shadow-[0_10px_35px_-8px_rgba(167,139,250,0.55)]">
-              <span className="relative block rounded-full bg-[#0b0b0f] px-6 py-3 text-[13px] font-medium text-white transition-colors duration-300 group-hover:bg-transparent group-hover:text-zinc-900 sm:px-7 sm:text-sm">Email me</span>
+            <motion.a href={`mailto:${profile.email}?subject=Hello%20Purshotam`} whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }} className="group relative block overflow-hidden rounded-full bg-gradient-to-r from-violet-400 via-fuchsia-400 to-cyan-400 p-px shadow-[0_10px_35px_-8px_rgba(167,139,250,0.55)]">
+              <span className="relative block rounded-full bg-[#0b0b0f] px-6 py-3 text-[13px] font-medium text-white transition-colors duration-300 group-hover:bg-transparent group-hover:text-zinc-900 sm:px-7 sm:text-sm">Open mail app</span>
             </motion.a>
           </Magnetic>
           <Magnetic>
