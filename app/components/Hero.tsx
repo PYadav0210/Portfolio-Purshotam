@@ -47,15 +47,21 @@ export default function Hero() {
           </AnimatePresence>
         </motion.div>
 
-        <motion.h1 animate={{ backgroundPosition: ["0% 50%", "200% 50%"] }} transition={{ duration: 8, repeat: Infinity, ease: "linear" }} className="flex max-w-full flex-wrap justify-center gap-x-[0.2em] bg-gradient-to-r from-violet-200 via-white via-30% to-cyan-200 bg-[length:200%_auto] bg-clip-text text-[2rem] font-light leading-[1.08] tracking-[-0.03em] text-transparent sm:text-6xl md:text-7xl lg:text-[6.5rem]">
-          {words.map((w, wi) => (
-            <span key={wi} className="whitespace-nowrap">
-              {w.split("").map((char, i) => (
+        <h1 className="w-full max-w-full">
+          {words.map((word, wi) => (
+            <motion.span
+              key={wi}
+              animate={{ backgroundPosition: ["0% 50%", "200% 50%"] }}
+              transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+              className="block w-full bg-gradient-to-r from-violet-200 via-white via-30% to-cyan-200 bg-[length:200%_auto] bg-clip-text font-light leading-[1.05] tracking-[-0.03em] text-transparent"
+              style={{ fontSize: "clamp(2.5rem, 13vw, 7rem)" }}
+            >
+              {word.split("").map((char, i) => (
                 <motion.span key={i} initial={{ opacity: 0, y: 50, filter: "blur(12px)" }} animate={{ opacity: 1, y: 0, filter: "blur(0px)" }} transition={{ delay: 0.5 + (wi * 5 + i) * 0.04, duration: 1, ease: [0.22, 1, 0.36, 1] }} className="inline-block">{char}</motion.span>
               ))}
-            </span>
+            </motion.span>
           ))}
-        </motion.h1>
+        </h1>
 
         <motion.div initial={{ scaleX: 0, opacity: 0 }} animate={{ scaleX: 1, opacity: 1 }} transition={{ delay: 1.5, duration: 1.2, ease: [0.22, 1, 0.36, 1] }} className="mt-7 h-px w-40 bg-gradient-to-r from-transparent via-fuchsia-400/60 to-transparent sm:w-56" />
 
