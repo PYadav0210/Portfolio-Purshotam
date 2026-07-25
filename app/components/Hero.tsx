@@ -47,7 +47,7 @@ export default function Hero() {
           </AnimatePresence>
         </motion.div>
 
-        <motion.h1 animate={{ backgroundPosition: ["0% 50%", "200% 50%"] }} transition={{ duration: 8, repeat: Infinity, ease: "linear" }} className="flex max-w-full flex-wrap justify-center gap-x-[0.25em] bg-gradient-to-r from-violet-200 via-white via-30% to-cyan-200 bg-[length:200%_auto] bg-clip-text text-[2.6rem] font-light leading-[1.05] tracking-[-0.04em] text-transparent sm:text-6xl md:text-7xl lg:text-[6.5rem]">
+        <motion.h1 animate={{ backgroundPosition: ["0% 50%", "200% 50%"] }} transition={{ duration: 8, repeat: Infinity, ease: "linear" }} className="flex max-w-full flex-wrap justify-center gap-x-[0.2em] bg-gradient-to-r from-violet-200 via-white via-30% to-cyan-200 bg-[length:200%_auto] bg-clip-text text-[2rem] font-light leading-[1.08] tracking-[-0.03em] text-transparent sm:text-6xl md:text-7xl lg:text-[6.5rem]">
           {words.map((w, wi) => (
             <span key={wi} className="whitespace-nowrap">
               {w.split("").map((char, i) => (
