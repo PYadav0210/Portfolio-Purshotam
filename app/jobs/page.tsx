@@ -6,13 +6,27 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { glass, sheen } from "../components/Glass";
 
+type Job = {
+  id: string;
+  title: string;
+  company: string;
+  location: string;
+  remote: boolean;
+  url: string;
+  tags: string[];
+  posted: number;
+  source: string;
+};
+
+type Source = { name: string; fetch: () => Promise<Job[]> };
+
 const REFRESH_MS = 5 * 60 * 1000;
 
-const SOURCES = [
+const SOURCES: Source[] = [
   {
     name: "Arbeitnow",
     fetch: async () => {
-      const all = [];
+      const all: any[] = [];
       for (let page = 1; page <= 4; page++) {
         try {
           const r = await fetch(`https://www.arbeitnow.com/api/job-board-api?page=${page}`);
@@ -20,7 +34,7 @@ const SOURCES = [
           all.push(...(d.data || []));
         } catch { break; }
       }
-      return all.map((j) => ({
+      return all.map((j: any) => ({
         id: `an-${j.slug}`,
         title: j.title,
         company: j.company_name,
@@ -39,7 +53,7 @@ const SOURCES = [
       try {
         const r = await fetch("https://remotive.com/api/remote-jobs?category=software-dev&limit=80");
         const d = await r.json();
-        return (d.jobs || []).map((j) => ({
+        return (d.jobs || []).map((j: any) => ({
           id: `rm-${j.id}`,
           title: j.title,
           company: j.company_name,
@@ -59,7 +73,7 @@ const SOURCES = [
       try {
         const r = await fetch("https://jobicy.com/api/v2/remote-jobs?count=50&industry=dev");
         const d = await r.json();
-        return (d.jobs || []).map((j) => ({
+        return (d.jobs || []).map((j: any) => ({
           id: `jb-${j.id}`,
           title: j.jobTitle,
           company: j.companyName,
@@ -77,21 +91,21 @@ const SOURCES = [
 
 const FIELDS = [
   { name: "All", match: () => true },
-  { name: "Frontend", match: (t) => /react|angular|vue|frontend|javascript|typescript|ui/i.test(t) },
-  { name: "Backend", match: (t) => /backend|node|java|python|php|golang|api|django/i.test(t) },
-  { name: "Data", match: (t) => /data|analyst|sql|python|bi|machine learning|scientist/i.test(t) },
-  { name: "DevOps", match: (t) => /devops|cloud|aws|azure|kubernetes|docker|infrastructure/i.test(t) },
-  { name: "Design", match: (t) => /design|ux|ui|figma/i.test(t) },
+  { name: "Frontend", match: (t: string) => /react|angular|vue|frontend|javascript|typescript|ui/i.test(t) },
+  { name: "Backend", match: (t: string) => /backend|node|java|python|php|golang|api|django/i.test(t) },
+  { name: "Data", match: (t: string) => /data|analyst|sql|python|bi|machine learning|scientist/i.test(t) },
+  { name: "DevOps", match: (t: string) => /devops|cloud|aws|azure|kubernetes|docker|infrastructure/i.test(t) },
+  { name: "Design", match: (t: string) => /design|ux|ui|figma/i.test(t) },
 ];
 
-const sourceColors = {
+const sourceColors: Record<string, string> = {
   Arbeitnow: "text-violet-300 border-violet-400/30 bg-violet-400/10",
   Remotive: "text-cyan-300 border-cyan-400/30 bg-cyan-400/10",
   Jobicy: "text-emerald-300 border-emerald-400/30 bg-emerald-400/10",
 };
 
-function daysSince(unix) { return Math.floor((Date.now() / 1000 - unix) / 86400); }
-function timeAgo(unix) {
+function daysSince(unix: number) { return Math.floor((Date.now() / 1000 - unix) / 86400); }
+function timeAgo(unix: number) {
   const d = daysSince(unix);
   if (d <= 0) return "today";
   if (d === 1) return "1 day ago";
@@ -99,13 +113,13 @@ function timeAgo(unix) {
 }
 
 export default function JobsPage() {
-  const [jobs, setJobs] = useState([]);
+  const [jobs, setJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-  const [lastUpdated, setLastUpdated] = useState(null);
+  const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
   const [now, setNow] = useState(Date.now());
   const [newCount, setNewCount] = useState(0);
-  const [applied, setApplied] = useState(new Set());
+  const [applied, setApplied] = useState<Set<string>>(new Set());
   const [source, setSource] = useState("All");
   const [field, setField] = useState("All");
   const [search, setSearch] = useState("");
@@ -118,7 +132,7 @@ export default function JobsPage() {
     } catch {}
   }, []);
 
-  const toggleApplied = (id) => {
+  const toggleApplied = (id: string) => {
     setApplied((prev) => {
       const next = new Set(prev);
       if (next.has(id)) next.delete(id);
@@ -173,7 +187,7 @@ export default function JobsPage() {
   }, [jobs, source, field, search]);
 
   const counts = useMemo(() => {
-    const c = { All: jobs.length };
+    const c: Record<string, number> = { All: jobs.length };
     SOURCES.forEach((s) => { c[s.name] = jobs.filter((j) => j.source === s.name).length; });
     return c;
   }, [jobs]);
