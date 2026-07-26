@@ -32,18 +32,10 @@ export default function Hero() {
 
   return (
     <section id="top" onMouseMove={onMove} onMouseLeave={reset} className="relative flex min-h-[100svh] flex-col items-center justify-center overflow-hidden px-5 py-24 text-center sm:px-6">
-      {/* background glows */}
       <motion.div aria-hidden animate={{ x: [0, 50, 0], y: [0, -40, 0], scale: [1, 1.2, 1] }} transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }} className="pointer-events-none absolute left-[12%] top-[18%] z-0 h-80 w-80 rounded-full bg-violet-600/20 blur-[120px]" />
       <motion.div aria-hidden animate={{ x: [0, -50, 0], y: [0, 40, 0], scale: [1, 1.25, 1] }} transition={{ duration: 22, repeat: Infinity, ease: "easeInOut" }} className="pointer-events-none absolute right-[12%] bottom-[18%] z-0 h-80 w-80 rounded-full bg-cyan-500/20 blur-[120px]" />
 
-      {/* floating content — tilts in 3D, no box */}
-      <motion.div
-        variants={container}
-        initial="hidden"
-        animate="show"
-        style={{ rotateX: srx, rotateY: sry, transformPerspective: 1600, transformStyle: "preserve-3d" }}
-        className="relative z-10 flex w-full max-w-4xl flex-col items-center"
-      >
+      <motion.div variants={container} initial="hidden" animate="show" style={{ rotateX: srx, rotateY: sry, transformPerspective: 1600, transformStyle: "preserve-3d" }} className="relative z-10 flex w-full max-w-4xl flex-col items-center">
         <motion.div variants={item} style={{ transform: "translateZ(30px)" }} className="mb-8 flex items-center gap-2.5 rounded-full border border-white/[0.12] bg-white/[0.05] px-4 py-1.5 backdrop-blur-xl shadow-[inset_0_1px_0_rgba(255,255,255,0.15)]">
           <span className="relative flex h-1.5 w-1.5">
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-70" />
@@ -54,7 +46,7 @@ export default function Hero() {
 
         <motion.p variants={item} style={{ transform: "translateZ(40px)" }} className="mb-4 text-[13px] font-light text-zinc-500 sm:text-sm">Hi, I&apos;m</motion.p>
 
-        <motion.h1 variants={item} style={{ transform: "translateZ(70px)" }} className="font-semibold leading-[0.98] tracking-[-0.045em] text-white" style={{ fontSize: "clamp(3rem, 15vw, 8rem)", transform: "translateZ(70px)" }}>
+        <motion.h1 variants={item} style={{ fontSize: "clamp(3rem, 15vw, 8rem)", transform: "translateZ(70px)" }} className="font-semibold leading-[0.98] tracking-[-0.045em] text-white">
           <span className="block">Purshotam</span>
           <span className="block bg-gradient-to-r from-violet-300 via-fuchsia-300 to-cyan-300 bg-clip-text text-transparent">Yadav</span>
         </motion.h1>
